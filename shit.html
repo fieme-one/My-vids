@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Videos from JSON</title>
+  <style>
+    .frame-box {
+      margin: 15px 0;
+      border: 2px solid #222;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .frame-box h3 {
+      margin: 0;
+      padding: 8px;
+      background: #eee;
+    }
+    iframe {
+      width: 100%;
+      height: 220px;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+<h2>🎥 Loaded Videos</h2>
+<div id="iframe-container">Loading videos...</div>
+
+<script>
+  // ✅ Use full path to the JSON file
+  fetch('https://my-vid.netlify.app/videos.json')
+    .then(response => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
+    .then(videos => {
+      const container = document.getElementById('iframe-container');
+      container.innerHTML = '';
+
+      videos.forEach((video, index) => {
+        container.innerHTML += `
+          <div class="frame-box">
+            <h3>${video.title}</h3>
+            <iframe src="${video.vidlink}" frameborder="0" allowfullscreen></iframe>
+          </div>
+        `;
+      });
+    })
+    .catch(error => {
+      document.getElementById('iframe-container').innerText = 'Failed to load videos.';
+      console.error('Error loading JSON:', error);
+    });
+</script>
+
+</body>
+</html>
